@@ -13,6 +13,10 @@ const FRONTEND_URL = process.env.FRONTEND_URL;
 
 const publicDir = path.join(process.cwd(), "public");
 
+app.use("/api/webhooks/clerk",express.raw({type: "application/json"}),clerkWebhook);
+
+
+
 app.use(express.json());
 app.use(
   cors({
@@ -22,6 +26,9 @@ app.use(
 );
 app.use(clerkMiddleware());
 
+app.get( "/health", (req, res) => {
+   res.status(200).json({ok:true})
+});
 // Production: serve the Vite build from public/
 if (fs.existsSync(publicDir)) {
   app.use(express.static(publicDir));
